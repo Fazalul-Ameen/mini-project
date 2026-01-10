@@ -5,12 +5,17 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <h2>Document Forgery Detection</h2>
-
-    <input type="file" id="document">
-    <button onclick="uploadDocument()">Upload</button>
-
+    <header>
+        <h2>Document Forgery Detection</h2>
+    </header>
+    
+    <main>
+        <h2>Give a document to check..</h2>
+        <input type="file" id="document" />
+        <button onclick="uploadDocument()">Upload</button>
+        <div id="previewContainer"></div>
+    </main>
+   
     <p id="result"></p>
 
     <script src="script.js"></script>
