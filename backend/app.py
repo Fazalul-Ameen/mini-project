@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from preprocessing import load_image,preprocess
 import os
 
 app = Flask(__name__)
@@ -20,6 +21,8 @@ def upload_file():
 
     file_path = os.path.join(UPLOAD_FOLDER, file.filename)
     file.save(file_path)
+    image=load_image(file_path)
+    preprocessed=preprocess(image)
 
     return jsonify({
         "status": "success",
