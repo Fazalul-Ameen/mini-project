@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from utils.preprocessing import load_image, preprocess, save_image
+from utils.ocr import extract_text
 import os
 
 app = Flask(__name__)
@@ -36,6 +37,9 @@ def upload_file():
     # Save output
     processed_path = os.path.join(PROCESSED_FOLDER, "processed_" + file.filename + ".png")
     save_image(processed_image, processed_path)
+
+    text = extract_text(processed_image)
+    print(text)
 
     return jsonify({
         "status": "success",

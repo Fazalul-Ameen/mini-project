@@ -17,6 +17,7 @@ function uploadDocument() {  //Document upload function
     .then(response => response.json())
     .then(data => {
         result.innerText = data.message;
+        previewContainer.style.display = "none";
     })
     .catch(error => { //If any error occurs
         result.innerText = "Error uploading file";
