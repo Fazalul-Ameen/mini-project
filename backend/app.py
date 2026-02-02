@@ -2,6 +2,9 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from utils.preprocessing import load_image, preprocess, save_image
 from utils.ocr import extract_text
+from utils.validation import *
+from utils.scoring import calculate_score
+from utils.decision import final_decision
 import os
 
 app = Flask(__name__)
@@ -39,12 +42,18 @@ def upload_file():
     save_image(processed_image, processed_path)
 
     text = extract_text(processed_image)
-    print(text)
+    validation_result = day1_validation(text)
+
+    print("\n--- OCR TEXT ---\n", text)
+    print("\n--- VALIDATION RESULT ---\n", validation_result)
+
+    score = calculate_score(validation_result, text)
+    decision = final_decision(score)
 
     return jsonify({
         "status": "success",
-        "message": "File uploaded and preprocessed",
-        "processed_file": processed_path
+        "validation": validation_result,
+        "message": "score : "+f"{score}"+" decision : "+decision
     })
 
 if __name__ == '__main__':

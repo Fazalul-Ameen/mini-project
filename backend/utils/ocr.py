@@ -1,7 +1,7 @@
 import pytesseract
 import cv2
 
-# Set tesseract path (Windows)
+#tesseract path (Windows)
 pytesseract.pytesseract.tesseract_cmd = r"E:\Tesseract-OCR\tesseract.exe"  # change if needed
 
 def extract_text(image):
@@ -10,3 +10,4 @@ def extract_text(image):
         config="--oem 3 --psm 6"
     )
     return text
+  
