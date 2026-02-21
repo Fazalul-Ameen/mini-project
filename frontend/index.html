@@ -14,11 +14,14 @@
         <p class="subtitle">AI + Rule-Based Hybrid Detection System</p>
 
         <!-- Upload Section -->
-        <div class="upload-box">
+         <form>
+            <div class="upload-box">
             <!-- Added name attribute + accept filter -->
             <input type="file" id="fileInput" name="file" accept="image/*,application/pdf">
             <button onclick="uploadImage()">Upload & Analyze</button>
         </div>
+         </form>
+        
 
         <!-- Preview -->
         <div id="previewContainer" style="display:none; margin-top:20px;"></div>
