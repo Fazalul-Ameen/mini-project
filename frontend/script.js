@@ -34,6 +34,8 @@ function uploadImage() {
     .then(response => response.json())
     .then(data => {
 
+        console.log(data);
+
         document.getElementById("loading").style.display = "none";
         document.getElementById("resultBox").style.display = "block";
 
