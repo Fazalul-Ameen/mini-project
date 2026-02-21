@@ -32,7 +32,6 @@ CORS(app)
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-
 # ===============================
 # MAIN ROUTE
 # ===============================
@@ -67,6 +66,7 @@ def predict():
     # 2️⃣ CNN PREDICTION
     # ===============================
     score, decision = predict_image(cnn_input)
+    print("CNN Decision:", decision)
 
     # ===============================
     # 3️⃣ OCR PREPROCESS
@@ -84,16 +84,20 @@ def predict():
     keywords_found = contains_keywords(cleaned_text)
 
     # ===============================
-    # FINAL RESPONSE
+    # FINAL RESPONSE (MATCH FRONTEND)
     # ===============================
+
+    final_decision = decision  # You can improve this logic later
+
     response = {
         "status": "success",
-        "cnn_score": round(float(score), 4),
-        "cnn_decision": decision,
+        "cnn_prediction": decision,
+        "cnn_confidence": round(float(score), 4),
+        "rule_score": 1 if keywords_found else 0,
+        "rule_decision": "Valid Keywords" if keywords_found else "Missing Keywords",
+        "final_decision": final_decision,
         "aadhaar_number": aadhaar_number,
-        "dob": dob,
-        "keywords_found": keywords_found,
-        "extracted_text": cleaned_text
+        "dob": dob
     }
 
     return jsonify(response)
