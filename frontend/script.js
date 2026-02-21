@@ -1,70 +1,66 @@
-const fileInput = document.getElementById("fileInput");
-const previewImage = document.getElementById("previewImage");
-const loading = document.getElementById("loading");
-const resultBox = document.getElementById("resultBox");
+document.addEventListener("DOMContentLoaded", function () {
 
-// Preview selected image
-fileInput.addEventListener("change", function () {
-    const file = this.files[0];
+    const fileInput = document.getElementById("fileInput");
+    const previewContainer = document.getElementById("previewContainer");
+    const imagePreview = document.getElementById("imagePreview");
 
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            previewImage.src = e.target.result;
-            previewImage.style.display = "block";
-        };
-        reader.readAsDataURL(file);
-    }
-});
+    fileInput.addEventListener("change", function () {
 
+        const file = this.files[0];
 
-// Upload image to Flask backend
-function uploadImage() {
+        if (!file) {
+            previewContainer.style.display = "none";
+            imagePreview.src = "";
+            previewContainer.innerHTML = "";
+            return;
+        }
 
-    const file = fileInput.files[0];
+        const fileType = file.type;
 
-    if (!file) {
-        alert("Please select an image first!");
-        return;
-    }
+        // Clear previous preview
+        previewContainer.innerHTML = "";
+        previewContainer.style.display = "block";
 
-    const formData = new FormData();
-    formData.append("file", file);
+        // 🖼 IMAGE PREVIEW
+        if (fileType.startsWith("image/")) {
 
-    loading.style.display = "block";
-    resultBox.style.display = "none";
+            const reader = new FileReader();
 
-    fetch('http://127.0.0.1:5000/predict', {
-        method: "POST",
-        body: formData
-    })
-    .then(response => response.json())
-   .then(data => {
+            reader.onload = function (e) {
+                const img = document.createElement("img");
+                img.src = e.target.result;
+                img.style.maxWidth = "100%";
+                img.style.maxHeight = "400px";
+                img.style.borderRadius = "10px";
+                previewContainer.appendChild(img);
+            };
 
-    console.log("Response:", data);
+            reader.readAsDataURL(file);
+        }
 
-    loading.style.display = "none";
-    resultBox.style.display = "block";
+        // 📄 PDF PREVIEW
+        else if (fileType === "application/pdf") {
 
-    document.getElementById("cnnPrediction").innerText = data.cnn_decision;
-    document.getElementById("cnnConfidence").innerText = data.cnn_score;
+            const reader = new FileReader();
 
-    document.getElementById("ruleScore").innerText = data.keywords_found ? "Keywords Found" : "No Keywords";
-    document.getElementById("ruleDecision").innerText = data.aadhaar_number ? "Aadhaar Detected" : "No Aadhaar";
+            reader.onload = function (e) {
+                const embed = document.createElement("embed");
+                embed.src = e.target.result;
+                embed.type = "application/pdf";
+                embed.width = "100%";
+                embed.height = "500px";
+                embed.style.borderRadius = "10px";
+                previewContainer.appendChild(embed);
+            };
 
-    const finalDecision = document.getElementById("finalDecision");
-    finalDecision.innerText = data.cnn_decision;
+            reader.readAsDataURL(file);
+        }
 
-    if (data.cnn_decision.toLowerCase().includes("forged")) {
-        finalDecision.style.color = "red";
-    } else {
-        finalDecision.style.color = "lime";
-    }
+        else {
+            alert("Unsupported file type. Please upload Image or PDF.");
+            previewContainer.style.display = "none";
+        }
 
-})
-    .catch(error => {
-        loading.style.display = "none";
-        alert("Error occurred while processing.");
-        console.error("Error:", error);
     });
-}
+
+});

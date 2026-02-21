@@ -14,14 +14,14 @@
 
         <!-- Upload Section -->
         <div class="upload-box">
-            <input type="file" id="fileInput" accept="image/*">
+            <input type="file" id="fileInput">
             <button onclick="uploadImage()">Upload & Analyze</button>
         </div>
 
-        <!-- Image Preview -->
-        <div class="preview-section">
-            <img id="previewImage" src="" alt="Preview" style="display:none;">
-        </div>
+        <!--preview-->
+        <input type="file" id="fileInput" name="file" required>
+
+        <div id="previewContainer" style="display:none; margin-top:20px;"></div>
 
         <!-- Loading Spinner -->
         <div id="loading" class="loading" style="display:none;">
