@@ -65,8 +65,4 @@ function uploadImage() {
         alert("Something went wrong.");
     });
 
-    document.getElementById("fileInput").addEventListener("change", function () {
-    const fileName = this.files[0] ? this.files[0].name : "No file chosen";
-    document.getElementById("fileName").innerText = fileName;
-});
 }
