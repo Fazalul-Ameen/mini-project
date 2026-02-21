@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Document Forgery Detection</title>
+    <!-- Flask Static Path Fix -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,12 +15,12 @@
 
         <!-- Upload Section -->
         <div class="upload-box">
-            <input type="file" id="fileInput">
+            <!-- Added name attribute + accept filter -->
+            <input type="file" id="fileInput" name="file" accept="image/*,application/pdf">
             <button onclick="uploadImage()">Upload & Analyze</button>
         </div>
 
-        <!--preview-->
-
+        <!-- Preview -->
         <div id="previewContainer" style="display:none; margin-top:20px;"></div>
 
         <!-- Loading Spinner -->
@@ -57,6 +58,8 @@
 
     </div>
 
-<script src="script.js"></script>
+    <!-- Flask Static JS Path Fix -->
+    <script src="script.js"></script>
+
 </body>
 </html>
