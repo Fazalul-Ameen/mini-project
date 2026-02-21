@@ -17,7 +17,13 @@
          <form>
             <div class="upload-box">
             <!-- Added name attribute + accept filter -->
-            <input type="file" id="fileInput" name="file" accept="image/*,application/pdf">
+            <div class="file-upload">
+    <label for="fileInput" class="custom-file-btn">
+        Choose File
+    </label>
+    <input type="file" id="fileInput" hidden>
+    <span id="fileName">No file chosen</span>
+        </div>
             <button onclick="uploadImage()" type="button">Upload & Analyze</button>
         </div>
          </form>

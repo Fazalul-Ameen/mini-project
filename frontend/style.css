@@ -176,3 +176,38 @@ button:hover {
 #finalDecision:hover {
     transform: scale(1.05);
 }
+
+/* ===== Custom File Upload Styling ===== */
+
+.file-upload {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.custom-file-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #00bcd4, #00e5ff);
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+}
+
+.custom-file-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 25px rgba(0, 229, 255, 0.8);
+}
+
+.custom-file-btn:active {
+    transform: scale(0.96);
+}
+
+#fileName {
+    display: block;
+    margin-top: 8px;
+    font-size: 14px;
+    color: #aaa;
+}
