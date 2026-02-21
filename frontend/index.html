@@ -1,23 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Document Forgery Detection</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h2>Document Forgery Detection</h2>
-    </header>
-    
-    <main>
-        <h2>Give a document to check..</h2>
-        <input type="file" id="document" />
-        <button onclick="uploadDocument()">Upload</button>
-        <div id="previewContainer"></div>
-    </main>
-   
-    <p id="result"></p>
 
-    <script src="script.js"></script>
+    <div class="container">
+
+        <h1>🛡 Document Forgery Detection</h1>
+        <p class="subtitle">AI + Rule-Based Hybrid Detection System</p>
+
+        <!-- Upload Section -->
+        <div class="upload-box">
+            <input type="file" id="fileInput" accept="image/*">
+            <button onclick="uploadImage()">Upload & Analyze</button>
+        </div>
+
+        <!-- Image Preview -->
+        <div class="preview-section">
+            <img id="previewImage" src="" alt="Preview" style="display:none;">
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loading" class="loading" style="display:none;">
+            <div class="spinner"></div>
+            <p>Analyzing Document...</p>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultBox" class="result-box" style="display:none;">
+
+            <h2>📊 Analysis Result</h2>
+
+            <p><strong>CNN Prediction:</strong> 
+                <span id="cnnPrediction"></span>
+            </p>
+
+            <p><strong>CNN Confidence:</strong> 
+                <span id="cnnConfidence"></span>%
+            </p>
+
+            <p><strong>Rule Score:</strong> 
+                <span id="ruleScore"></span>
+            </p>
+
+            <p><strong>Rule Decision:</strong> 
+                <span id="ruleDecision"></span>
+            </p>
+
+            <hr>
+
+            <h3 id="finalDecision"></h3>
+
+        </div>
+
+    </div>
+
+<script src="script.js"></script>
 </body>
 </html>

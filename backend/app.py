@@ -1,60 +1,107 @@
+import os
+import cv2
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from utils.preprocessing import load_image, preprocess, save_image
-from utils.ocr import extract_text
-from utils.validation import *
-from utils.scoring import calculate_score
-from utils.decision import final_decision
-import os
+
+# CNN
+from models.cnn_predict import predict_image
+
+# Preprocessing
+from utils.preprocessing import (
+    load_image,
+    preprocess_for_cnn,
+    preprocess_for_ocr
+)
+
+# OCR
+from utils.ocr import (
+    extract_text,
+    clean_text,
+    extract_aadhaar_number,
+    extract_dob,
+    contains_keywords
+)
+
+# ===============================
+# FLASK CONFIG
+# ===============================
 
 app = Flask(__name__)
 CORS(app)
 
 UPLOAD_FOLDER = "uploads"
-PROCESSED_FOLDER = "processed"
-
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-os.makedirs(PROCESSED_FOLDER, exist_ok=True)
 
-@app.route('/upload', methods=['POST'])
-def upload_file():
-    if 'document' not in request.files:
-        return jsonify({"status": "error", "message": "No file part"})
 
-    file = request.files['document']
+# ===============================
+# MAIN ROUTE
+# ===============================
 
-    if file.filename == '':
-        return jsonify({"status": "error", "message": "No selected file"})
+@app.route("/predict", methods=["POST"])
+def predict():
 
-    file_path = os.path.join(UPLOAD_FOLDER, file.filename)
-    file.save(file_path)
+    if "file" not in request.files:
+        return jsonify({"status": "error", "message": "No file uploaded"}), 400
 
-    # Load image or PDF
-    image = load_image(file_path)
+    file = request.files["file"]
+
+    if file.filename == "":
+        return jsonify({"status": "error", "message": "Empty filename"}), 400
+
+    # Save file
+    filepath = os.path.join(UPLOAD_FOLDER, file.filename)
+    file.save(filepath)
+
+    # Load image (handles pdf + image)
+    image = load_image(filepath)
+
     if image is None:
-        return jsonify({"status": "error", "message": "Unsupported file"})
+        return jsonify({"status": "error", "message": "Invalid image"}), 400
 
-    # Preprocess
-    processed_image = preprocess(image)
+    # ===============================
+    # 1️⃣ CNN PREPROCESS
+    # ===============================
+    cnn_input = preprocess_for_cnn(image)
 
-    # Save output
-    processed_path = os.path.join(PROCESSED_FOLDER, "processed_" + file.filename + ".png")
-    save_image(processed_image, processed_path)
+    # ===============================
+    # 2️⃣ CNN PREDICTION
+    # ===============================
+    score, decision = predict_image(cnn_input)
 
-    text = extract_text(processed_image)
-    validation_result = day1_validation(text)
+    # ===============================
+    # 3️⃣ OCR PREPROCESS
+    # ===============================
+    ocr_ready = preprocess_for_ocr(image)
 
-    print("\n--- OCR TEXT ---\n", text)
-    print("\n--- VALIDATION RESULT ---\n", validation_result)
+    # ===============================
+    # 4️⃣ OCR EXTRACTION
+    # ===============================
+    raw_text = extract_text(ocr_ready)
+    cleaned_text = clean_text(raw_text)
 
-    score = calculate_score(validation_result, text)
-    decision = final_decision(score)
+    aadhaar_number = extract_aadhaar_number(cleaned_text)
+    dob = extract_dob(cleaned_text)
+    keywords_found = contains_keywords(cleaned_text)
 
-    return jsonify({
+    # ===============================
+    # FINAL RESPONSE
+    # ===============================
+    response = {
         "status": "success",
-        "validation": validation_result,
-        "message": "score : "+f"{score}"+" decision : "+decision
-    })
+        "cnn_score": round(float(score), 4),
+        "cnn_decision": decision,
+        "aadhaar_number": aadhaar_number,
+        "dob": dob,
+        "keywords_found": keywords_found,
+        "extracted_text": cleaned_text
+    }
 
-if __name__ == '__main__':
+    return jsonify(response)
+
+
+# ===============================
+# RUN SERVER
+# ===============================
+
+if __name__ == "__main__":
     app.run(debug=True)

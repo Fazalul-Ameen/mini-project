@@ -1,109 +1,121 @@
-body {
-    font-family: Arial, sans-serif;
-    min-width: fit-content;
-    min-height: 100vh;
-    background-color: rgb(8, 8, 8);
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
 }
 
-/* ---------- Header ---------- */
-header {
-    width: 100%;
-    padding: 1em 2em;
-    font-size: large;
+body {
+    height: 100vh;
+    background: linear-gradient(135deg, #1f1f1f, #121212);
     display: flex;
+    justify-content: center;
     align-items: center;
-    background-color: rgb(48, 49, 50);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.6);
-    position: sticky;
-    top: 0;
-    z-index: 999;
-    backdrop-filter: blur(6px);
-}
-
-/* ---------- Main Card ---------- */
-main {
-    margin-top: 40px;
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-    align-items: center;
-    width: 70%;
-    border: 5px double white;
-    border-radius: 50px;
-    padding: 40px;
-    background: rgba(255, 255, 255, 0.02);
-    backdrop-filter: blur(6px);
-}
-
-/* ---------- File Input ---------- */
-#document {
-    width: 100%;
-    border: 2px solid rgb(64, 61, 61);
-    padding: 12px 20px;
-    border-radius: 8px;
-    background-color: rgb(18, 18, 18);
     color: white;
 }
 
-/* File selector button */
-input[type="file"]::file-selector-button {
-    background-color: #007bff;
+.container {
+    width: 600px;
+    padding: 30px;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    font-size: 14px;
+    margin-bottom: 20px;
+    color: #aaa;
+}
+
+/* Upload Section */
+
+.upload-box {
+    margin-bottom: 20px;
+}
+
+input[type="file"] {
+    margin-bottom: 10px;
     color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s ease;
 }
 
-/* Hover effect */
-input[type="file"]::file-selector-button:hover {
-    background-color: #0056b3;
-    transform: scale(1);
-}
-
-/* ---------- Upload Button ---------- */
 button {
-    width: 30%;
-    height: 2.5em;
-    background-color: aquamarine;
+    padding: 10px 20px;
     border: none;
     border-radius: 8px;
-    font-size: 1rem;
+    background: #00bcd4;
+    color: black;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: 0.3s ease;
 }
 
 button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(127, 255, 212, 0.4);
+    background: #00e5ff;
+    transform: scale(1.05);
 }
 
-/* ---------- Preview Container ---------- */
-#previewContainer {
-    width: 100%;
-    border: 1px dashed #aaa;
-    padding: 15px;
+/* Image Preview */
+
+.preview-section {
+    margin: 20px 0;
+}
+
+#previewImage {
+    max-width: 100%;
     border-radius: 10px;
-    background: #f9f9f9;
-    color: black;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
 }
 
-#previewContainer img,
-#previewContainer embed {
-    margin-top: 10px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+/* Loading Spinner */
+
+.loading {
+    margin: 20px 0;
 }
 
-/* ---------- Result Text ---------- */
-#result {
+.spinner {
+    margin: 10px auto;
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-top: 4px solid #00e5ff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Results */
+
+.result-box {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    text-align: left;
+}
+
+.result-box h2 {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.result-box p {
+    margin: 6px 0;
+}
+
+#finalDecision {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 20px;
     font-weight: bold;
-    margin-top: 10px;
 }

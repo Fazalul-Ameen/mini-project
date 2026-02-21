@@ -1,77 +1,70 @@
-function uploadDocument() {  //Document upload function
-    const fileInput = document.getElementById('document');
-    const result = document.getElementById('result');
+const fileInput = document.getElementById("fileInput");
+const previewImage = document.getElementById("previewImage");
+const loading = document.getElementById("loading");
+const resultBox = document.getElementById("resultBox");
 
-    if (fileInput.files.length === 0) {  //if no file is selected
-        result.innerText = "Please select a file.";
+// Preview selected image
+fileInput.addEventListener("change", function () {
+    const file = this.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            previewImage.src = e.target.result;
+            previewImage.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+
+// Upload image to Flask backend
+function uploadImage() {
+
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert("Please select an image first!");
         return;
     }
 
-    const formData = new FormData(); //Creating FormData object to send file
-    formData.append('document', fileInput.files[0]);
+    const formData = new FormData();
+    formData.append("file", file);
 
-    fetch('http://127.0.0.1:5000/upload', { //sending the file to backend.
-        method: 'POST',
+    loading.style.display = "block";
+    resultBox.style.display = "none";
+
+    fetch('http://127.0.0.1:5000/predict', {
+        method: "POST",
         body: formData
     })
     .then(response => response.json())
-    .then(data => {
-        result.innerText = data.message;
-        previewContainer.style.display = "none";
-    })
-    .catch(error => { //If any error occurs
-        result.innerText = "Error uploading file";
-        console.error(error);
+   .then(data => {
+
+    console.log("Response:", data);
+
+    loading.style.display = "none";
+    resultBox.style.display = "block";
+
+    document.getElementById("cnnPrediction").innerText = data.cnn_decision;
+    document.getElementById("cnnConfidence").innerText = data.cnn_score;
+
+    document.getElementById("ruleScore").innerText = data.keywords_found ? "Keywords Found" : "No Keywords";
+    document.getElementById("ruleDecision").innerText = data.aadhaar_number ? "Aadhaar Detected" : "No Aadhaar";
+
+    const finalDecision = document.getElementById("finalDecision");
+    finalDecision.innerText = data.cnn_decision;
+
+    if (data.cnn_decision.toLowerCase().includes("forged")) {
+        finalDecision.style.color = "red";
+    } else {
+        finalDecision.style.color = "lime";
+    }
+
+})
+    .catch(error => {
+        loading.style.display = "none";
+        alert("Error occurred while processing.");
+        console.error("Error:", error);
     });
 }
-
-// File Preview Functionality
-const fileInput = document.getElementById("document");
-const previewContainer = document.getElementById("previewContainer");
-
-previewContainer.style.display="none";
-
-fileInput.addEventListener("change", function () {
-    previewContainer.innerHTML = "";
-    previewContainer.style.display="block";
-    const file = this.files[0];
-    if (!file) return;
-
-    // File name
-    const fileInfo = document.createElement("p");
-    fileInfo.innerText = `Selected File: ${file.name}`;
-    previewContainer.appendChild(fileInfo);
-
-    // IMAGE PREVIEW
-    if (file.type.startsWith("image/")) {
-        const img = document.createElement("img");
-        img.style.maxWidth = "300px";
-        img.style.marginTop = "10px";
-
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            img.src = e.target.result;
-        };
-
-        reader.readAsDataURL(file);
-        previewContainer.appendChild(img);
-    }
-
-    // PDF PREVIEW
-    else if (file.type === "application/pdf") {
-        const pdfPreview = document.createElement("embed");
-        pdfPreview.src = URL.createObjectURL(file);
-        pdfPreview.type = "application/pdf";
-        pdfPreview.width = "100%";
-        pdfPreview.height = "400px";
-
-        previewContainer.appendChild(pdfPreview);
-    }
-
-    // Unsupported file
-    else {
-        const msg = document.createElement("p");
-        msg.innerText = "Preview not available for this file type.";
-        previewContainer.appendChild(msg);
-    }
-});
