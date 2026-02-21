@@ -10,6 +10,6 @@ def predict_image(processed_image):
     prediction = model.predict(processed_image)[0][0]
 
     if prediction >= 0.5:
-        return float(prediction), "FORGED"
-    else:
         return float(prediction), "REAL"
+    else:
+        return float(prediction), "FORGED"

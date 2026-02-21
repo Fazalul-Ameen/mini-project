@@ -41,8 +41,7 @@ function uploadImage() {
 
         document.getElementById("cnnPrediction").innerText = data.cnn_prediction;
         document.getElementById("cnnConfidence").innerText = data.cnn_confidence;
-        document.getElementById("ruleScore").innerText = data.rule_score;
-        document.getElementById("ruleDecision").innerText = data.rule_decision;
+
         document.getElementById("finalDecision").innerText = data.final_decision;
     })
     .catch(error => {
