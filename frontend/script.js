@@ -9,17 +9,33 @@ function uploadImage() {
     }
 
     // =========================
-    // 🔎 IMAGE PREVIEW SECTION
+    // 🔎 IMAGE + PDF PREVIEW SECTION (ONLY THIS PART UPDATED)
     // =========================
     const previewContainer = document.getElementById("previewContainer");
     previewContainer.style.display = "block";
-    previewContainer.innerHTML = `
-        <img src="${URL.createObjectURL(file)}" 
-             style="max-width:300px; border-radius:8px; box-shadow:0 4px 8px rgba(0,0,0,0.2);">
-    `;
+
+    const fileURL = URL.createObjectURL(file);
+
+    if (file.type === "application/pdf") {
+
+        previewContainer.innerHTML = `
+            <embed src="${fileURL}" 
+                   type="application/pdf"
+                   width="100%" 
+                   height="400px"
+                   style="border-radius:8px; box-shadow:0 4px 8px rgba(0,0,0,0.2);">
+        `;
+
+    } else {
+
+        previewContainer.innerHTML = `
+            <img src="${fileURL}" 
+                 style="max-width:300px; border-radius:8px; box-shadow:0 4px 8px rgba(0,0,0,0.2);">
+        `;
+    }
 
     // =========================
-    // 📡 SEND TO BACKEND
+    // 📡 SEND TO BACKEND (UNCHANGED)
     // =========================
     const formData = new FormData();
     formData.append("file", file);
@@ -41,7 +57,6 @@ function uploadImage() {
 
         document.getElementById("cnnPrediction").innerText = data.cnn_prediction;
         document.getElementById("cnnConfidence").innerText = data.cnn_confidence;
-
         document.getElementById("finalDecision").innerText = data.final_decision;
     })
     .catch(error => {
