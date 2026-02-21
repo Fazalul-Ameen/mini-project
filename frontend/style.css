@@ -7,31 +7,51 @@
 
 body {
     height: 100vh;
-    background: linear-gradient(135deg, #1f1f1f, #121212);
+    background: radial-gradient(circle at top left, #1a1a2e, #0f0f1a 60%, #000000);
     display: flex;
     justify-content: center;
     align-items: center;
     color: white;
+    overflow: hidden;
+}
+
+/* Floating animation */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
 }
 
 .container {
     width: 600px;
-    padding: 30px;
-    border-radius: 15px;
+    padding: 35px;
+    border-radius: 18px;
     background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(18px);
+    box-shadow:
+        0 0 40px rgba(0, 255, 255, 0.15),
+        0 0 80px rgba(0, 0, 0, 0.8);
     text-align: center;
+    animation: float 6s ease-in-out infinite;
+    transition: 0.4s ease;
+}
+
+.container:hover {
+    box-shadow:
+        0 0 60px rgba(0, 255, 255, 0.35),
+        0 0 100px rgba(0, 0, 0, 0.9);
 }
 
 h1 {
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    font-size: 28px;
+    letter-spacing: 1px;
 }
 
 .subtitle {
     font-size: 14px;
-    margin-bottom: 20px;
-    color: #aaa;
+    margin-bottom: 25px;
+    color: #bbb;
 }
 
 /* Upload Section */
@@ -41,52 +61,61 @@ h1 {
 }
 
 input[type="file"] {
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     color: white;
 }
 
 button {
-    padding: 10px 20px;
+    padding: 12px 25px;
     border: none;
-    border-radius: 8px;
-    background: #00bcd4;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #00bcd4, #00e5ff);
     color: black;
     font-weight: bold;
     cursor: pointer;
     transition: 0.3s ease;
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
 }
 
 button:hover {
-    background: #00e5ff;
-    transform: scale(1.05);
+    transform: scale(1.08);
+    box-shadow: 0 0 25px rgba(0, 229, 255, 0.8);
 }
 
 /* Image Preview */
 
 .preview-section {
-    margin: 20px 0;
+    margin: 25px 0;
+    animation: fadeIn 0.6s ease forwards;
 }
 
 #previewImage {
     max-width: 100%;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.35);
+    transition: 0.3s ease;
+}
+
+#previewImage:hover {
+    transform: scale(1.02);
 }
 
 /* Loading Spinner */
 
 .loading {
-    margin: 20px 0;
+    margin: 25px 0;
+    animation: fadeIn 0.4s ease forwards;
 }
 
 .spinner {
-    margin: 10px auto;
-    border: 4px solid rgba(255, 255, 255, 0.2);
+    margin: 15px auto;
+    border: 4px solid rgba(255, 255, 255, 0.15);
     border-top: 4px solid #00e5ff;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     animation: spin 1s linear infinite;
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
 }
 
 @keyframes spin {
@@ -94,28 +123,56 @@ button:hover {
     100% { transform: rotate(360deg); }
 }
 
+/* Fade Animation */
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 /* Results */
 
 .result-box {
-    margin-top: 20px;
-    padding: 20px;
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.5);
+    margin-top: 25px;
+    padding: 22px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(12px);
     text-align: left;
+    animation: fadeIn 0.6s ease forwards;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+    transition: 0.3s ease;
+}
+
+.result-box:hover {
+    box-shadow: 0 0 45px rgba(0, 255, 255, 0.3);
 }
 
 .result-box h2 {
-    margin-bottom: 15px;
+    margin-bottom: 18px;
     text-align: center;
+    color: #00e5ff;
 }
 
 .result-box p {
-    margin: 6px 0;
+    margin: 8px 0;
+    font-size: 15px;
+    color: #ddd;
 }
 
 #finalDecision {
-    margin-top: 15px;
+    margin-top: 18px;
     text-align: center;
-    font-size: 20px;
+    font-size: 22px;
     font-weight: bold;
+    padding: 8px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #00e5ff, #00bcd4);
+    color: black;
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+    transition: 0.3s ease;
+}
+
+#finalDecision:hover {
+    transform: scale(1.05);
 }
