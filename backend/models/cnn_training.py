@@ -5,7 +5,9 @@ import matplotlib.pyplot as plt
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
+from sklearn.metrics import confusion_matrix, classification_report
+import seaborn as sns
 
 # ==============================
 # CONFIG
@@ -14,36 +16,38 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 DATASET_PATH = "datasets"
 IMG_SIZE = 128
 BATCH_SIZE = 16
-EPOCHS = 15
+EPOCHS = 30
 MODEL_PATH = "model.h5"
 
 # ==============================
 # DATA PREPROCESSING
 # ==============================
 
-train_datagen = ImageDataGenerator(
-    rescale=1./255,
-    validation_split=0.2,
-    rotation_range=10,
-    zoom_range=0.1
+train_gen = ImageDataGenerator(rescale=1./255)
+val_gen = ImageDataGenerator(rescale=1./255)
+test_gen = ImageDataGenerator(rescale=1./255)
+
+train_data = train_gen.flow_from_directory(
+    "datasets/train",
+    target_size=(128,128),
+    batch_size=32,
+    class_mode="binary"
 )
 
-train_generator = train_datagen.flow_from_directory(
-    DATASET_PATH,
-    target_size=(IMG_SIZE, IMG_SIZE),
-    batch_size=BATCH_SIZE,
-    class_mode='binary',
-    subset='training'
+val_data = val_gen.flow_from_directory(
+    "datasets/val",
+    target_size=(128,128),
+    batch_size=32,
+    class_mode="binary"
 )
 
-val_generator = train_datagen.flow_from_directory(
-    DATASET_PATH,
-    target_size=(IMG_SIZE, IMG_SIZE),
-    batch_size=BATCH_SIZE,
-    class_mode='binary',
-    subset='validation'
+test_data = test_gen.flow_from_directory(
+    "datasets/test",
+    target_size=(128,128),
+    batch_size=32,
+    class_mode="binary",
+    shuffle=False
 )
-
 # ==============================
 # CNN MODEL
 # ==============================
@@ -90,11 +94,13 @@ checkpoint = ModelCheckpoint(
 # TRAIN MODEL
 # ==============================
 
+early = EarlyStopping(patience=5, restore_best_weights=True)
+
 history = model.fit(
-    train_generator,
-    validation_data=val_generator,
+    train_data,
+    validation_data=val_data,
     epochs=EPOCHS,
-    callbacks=[checkpoint]
+    callbacks=[early]
 )
 
 print("\n✅ Training Completed.")
@@ -127,3 +133,50 @@ plt.savefig("loss_graph.png")
 plt.show()
 
 print("📊 Graphs saved as accuracy_graph.png and loss_graph.png")
+
+#-------------------------------
+#metrics
+#-------------------------------
+
+
+# Predict
+preds = model.predict(test_data)
+pred_classes = (preds > 0.5).astype("int32")
+
+true_classes = test_data.classes
+
+# Confusion matrix
+cm = confusion_matrix(true_classes, pred_classes)
+print("Confusion Matrix:\n", cm)
+
+# Classification report
+report = classification_report(true_classes, pred_classes, target_names=["REAL","FORGED"])
+print(report)
+
+
+
+
+# Accuracy graph
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.title("Model Accuracy")
+plt.legend(["Train", "Validation"])
+plt.savefig("accuracy.png")
+plt.clf()
+
+# Loss graph
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title("Model Loss")
+plt.legend(["Train", "Validation"])
+plt.savefig("loss.png")
+plt.clf()
+
+# Confusion matrix heatmap
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.title("Confusion Matrix")
+plt.savefig("confusion_matrix.png")
+
+print(model.summary())

@@ -92,7 +92,7 @@ def predict():
     response = {
         "status": "success",
         "cnn_prediction": decision,
-        "cnn_confidence": score,
+        "cnn_confidence": round(score*100,4),
         "rule_score": 1 if keywords_found else 0,
         "rule_decision": "Valid Keywords" if keywords_found else "Missing Keywords",
         "final_decision": final_decision,
