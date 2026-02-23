@@ -87,7 +87,7 @@ def predict():
     # FINAL RESPONSE (MATCH FRONTEND)
     # ===============================
 
-    final_decision = decision  # You can improve this logic later
+    final_decision = decision  
 
     response = {
         "status": "success",
