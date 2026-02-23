@@ -59,7 +59,10 @@ function uploadImage() {
         document.getElementById("cnnConfidence").innerText = data.cnn_confidence;
         document.getElementById("ruleScore").innerText = data.rule_score;
         document.getElementById("ruleDecision").innerText = data.rule_decision;
-        document.getElementById("finalDecision").innerText = data.final_decision;
+        const result = document.getElementById("finalDecision").innerText = data.final_decision;
+        if(result === "Forged"){
+            document.getElementById("finalDecision").style.color = "#ff4d4d";
+        }
     })
     .catch(error => {
         console.error("Error:", error);
