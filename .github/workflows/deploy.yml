@@ -1,5 +1,5 @@
 
-name: Deploy Frontend to GitHub Pages
+name: Deploy Frontend to GitHub Pages using github actions
 
 on:
   push:
