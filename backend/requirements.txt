@@ -1,7 +1,7 @@
 Flask
 Flask-Cors
-tensorflow
 numpy
+tensorflow
 Pillow
 pytesseract
 opencv-python
