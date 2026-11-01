@@ -1,0 +1,11 @@
+Flask
+Flask-Cors
+tensorflow
+numpy
+Pillow
+pytesseract
+opencv-python
+PyMuPDF
+scikit-learn
+matplotlib
+seaborn
