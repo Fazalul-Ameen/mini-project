@@ -5,9 +5,8 @@ from pdf2image import convert_from_path
 POPPLER_PATH = r"E:\Users\fazal\Release-25.12.0-0\poppler-25.12.0\Library\bin"
 
 
-# ==========================
 # LOAD IMAGE (PDF OR IMAGE)
-# ==========================
+
 def load_image(file_path):
     try:
         if file_path.lower().endswith(".pdf"):
@@ -23,9 +22,9 @@ def load_image(file_path):
         return None
 
 
-# ==========================
+
 # OCR PREPROCESSING
-# ==========================
+
 def preprocess_for_ocr(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     denoised = cv2.GaussianBlur(gray, (5, 5), 0)
@@ -45,9 +44,8 @@ def preprocess_for_ocr(image):
     return binary
 
 
-# ==========================
 # CNN PREPROCESSING
-# ==========================
+
 def preprocess_for_cnn(image):
     image = cv2.resize(image, (128, 128))
     image = image / 255.0
@@ -55,8 +53,8 @@ def preprocess_for_cnn(image):
     return image
 
 
-# ==========================
+
 # SAVE IMAGE
-# ==========================
+
 def save_image(image, path):
     cv2.imwrite(path, image)

@@ -43,7 +43,7 @@ function uploadImage() {
     document.getElementById("loading").style.display = "block";
     document.getElementById("resultBox").style.display = "none";
 
-    fetch("http://127.0.0.1:5000/predict", {
+    fetch("https://mini-project-six-eosin.vercel.app/predict", {
         method: "POST",
         body: formData
     })

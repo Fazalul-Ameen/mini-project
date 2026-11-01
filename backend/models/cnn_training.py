@@ -9,9 +9,8 @@ from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
 from sklearn.metrics import confusion_matrix, classification_report
 import seaborn as sns
 
-# ==============================
+
 # CONFIG
-# ==============================
 
 DATASET_PATH = "datasets"
 IMG_SIZE = 128
@@ -19,9 +18,8 @@ BATCH_SIZE = 16
 EPOCHS = 30
 MODEL_PATH = "model.h5"
 
-# ==============================
 # DATA PREPROCESSING
-# ==============================
+
 
 train_gen = ImageDataGenerator(rescale=1./255)
 val_gen = ImageDataGenerator(rescale=1./255)
@@ -78,9 +76,8 @@ model.compile(
 
 model.summary()
 
-# ==============================
+
 # SAVE BEST MODEL
-# ==============================
 
 checkpoint = ModelCheckpoint(
     MODEL_PATH,
@@ -90,9 +87,8 @@ checkpoint = ModelCheckpoint(
     verbose=1
 )
 
-# ==============================
 # TRAIN MODEL
-# ==============================
+
 
 early = EarlyStopping(patience=5, restore_best_weights=True)
 
@@ -106,9 +102,8 @@ history = model.fit(
 print("\n✅ Training Completed.")
 print("Model saved as model.h5")
 
-# ==============================
+
 # PLOT GRAPHS
-# ==============================
 
 # Accuracy Plot
 plt.figure()

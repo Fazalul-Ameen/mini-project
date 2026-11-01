@@ -4,9 +4,9 @@ import re
 
 pytesseract.pytesseract.tesseract_cmd = r"E:\Tesseract-OCR\tesseract.exe"
 
-# ==========================================
+
 # OCR EXTRACTION
-# ==========================================
+
 def extract_text(image):
     """
     Extract raw text from image using Tesseract OCR
@@ -20,9 +20,9 @@ def extract_text(image):
         return ""
 
 
-# ==========================================
+
 # CLEAN TEXT
-# ==========================================
+
 def clean_text(text):
     """
     Remove unwanted symbols and normalize spacing
@@ -33,9 +33,8 @@ def clean_text(text):
     return text
 
 
-# ==========================================
 # EXTRACT AADHAAR NUMBER
-# ==========================================
+
 def extract_aadhaar_number(text):
     """
     Aadhaar format: 12 digits (XXXX XXXX XXXX)
@@ -45,9 +44,8 @@ def extract_aadhaar_number(text):
     return match.group() if match else None
 
 
-# ==========================================
 # EXTRACT DOB
-# ==========================================
+
 def extract_dob(text):
     """
     Extract Date of Birth formats:
@@ -69,9 +67,9 @@ def extract_dob(text):
     return None
 
 
-# ==========================================
+
 # CHECK IF KEYWORDS EXIST
-# ==========================================
+
 def contains_keywords(text):
     """
     Check Aadhaar specific keywords

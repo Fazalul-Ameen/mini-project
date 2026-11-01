@@ -22,9 +22,9 @@ from utils.ocr import (
     contains_keywords
 )
 
-# ===============================
+
 # FLASK CONFIG
-# ===============================
+
 
 app = Flask(__name__)
 CORS(app)
@@ -32,9 +32,9 @@ CORS(app)
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# ===============================
+
 # MAIN ROUTE
-# ===============================
+
 
 @app.route("/predict", methods=["POST"])
 def predict():
@@ -57,25 +57,25 @@ def predict():
     if image is None:
         return jsonify({"status": "error", "message": "Invalid image"}), 400
 
-    # ===============================
+
     # 1️⃣ CNN PREPROCESS
-    # ===============================
+
     cnn_input = preprocess_for_cnn(image)
 
-    # ===============================
+
     # 2️⃣ CNN PREDICTION
-    # ===============================
+
     score, decision = predict_image(cnn_input)
     print("CNN Decision:", decision)
 
-    # ===============================
+
     # 3️⃣ OCR PREPROCESS
-    # ===============================
+
     ocr_ready = preprocess_for_ocr(image)
 
-    # ===============================
+
     # 4️⃣ OCR EXTRACTION
-    # ===============================
+
     raw_text = extract_text(ocr_ready)
     cleaned_text = clean_text(raw_text)
 
@@ -83,9 +83,9 @@ def predict():
     dob = extract_dob(cleaned_text)
     keywords_found = contains_keywords(cleaned_text)
 
-    # ===============================
-    # FINAL RESPONSE (MATCH FRONTEND)
-    # ===============================
+
+    # FINAL RESPONSE
+
 
     final_decision = decision  
 
